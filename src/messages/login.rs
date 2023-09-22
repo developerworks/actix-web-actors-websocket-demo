@@ -4,13 +4,13 @@ use actix::{Handler, AsyncContext};
 use actix_web_actors::ws;
 use serde::Deserialize;
 
-use super::{MyWebSocket, MessageHandler, response_message::ResponseMessage};
+use super::{MyWebSocket, MessageHandler, resp::ResponseMessage};
 
 // 定义 Login 消息类型
 #[derive(Debug,Deserialize)]
 pub struct Login {
-    pub username: String,
-    pub password: String,
+    pub account: String,
+    pub sign: String,
 }
 
 impl actix::Message for Login {
@@ -30,11 +30,11 @@ impl MessageHandler for LoginHandler {
 
         match serde_json::from_value::<Login>(msg) {
             Ok(login) => {
-                println!("User {} logged in", login.username);
+                println!("User {} logged in", login.account);
                 let response = ResponseMessage {
                     code: "200".to_string(),
                     message: "Login successful".to_string(),
-                    data: serde_json::json!({ "username": login.username }),
+                    data: serde_json::json!({ "username": login.account }),
                 };
                 ctx.address().do_send(response);
             },
@@ -61,7 +61,7 @@ impl Handler<Login> for MyWebSocket {
         let response = ResponseMessage {
             code: "200".to_string(),
             message: "Login successful".to_string(),
-            data: serde_json::json!({ "username": msg.username }),
+            data: serde_json::json!({ "username": msg.account }),
         };
         ctx.address().do_send(response);
     }

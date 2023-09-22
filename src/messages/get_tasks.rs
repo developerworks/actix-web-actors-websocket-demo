@@ -4,7 +4,7 @@ use actix::{Handler, AsyncContext};
 use actix_web_actors::ws;
 use serde::Deserialize;
 
-use crate::messages::response_message::ResponseMessage;
+use crate::messages::resp::ResponseMessage;
 
 use super::{MessageHandler, MyWebSocket};
 

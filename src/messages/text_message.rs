@@ -3,7 +3,7 @@
 use actix::{AsyncContext, Handler};
 use actix_web_actors::ws;
 
-use crate::messages::response_message::ResponseMessage;
+use crate::messages::resp::ResponseMessage;
 
 use super::{MessageHandler, MyWebSocket};
 

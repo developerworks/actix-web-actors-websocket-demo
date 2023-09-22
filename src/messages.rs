@@ -1,16 +1,22 @@
-use std::collections::HashMap;
+use crate::dispatcher::MessageDispatcher;
 
 use actix::Actor;
 use actix_web_actors::ws;
+use std::collections::HashMap;
 
-use self::{get_tasks::GetTasksHandler, hall::user_mail::UserMailHandler, login::LoginHandler, text_message::TextMessageHandler};
+#[rustfmt::skip]
+use self::{
+    examples::{
+        text_message::TextMessageHandler, 
+        get_tasks::GetTasksHandler
+    }, 
+    hall::{
+        login::LoginHandler, 
+        user_mail::UserMailHandler
+    }
+};
 
-pub mod error_message;
-pub mod get_tasks;
-pub mod login;
-pub mod resp;
-pub mod text_message;
-
+pub mod examples;
 pub mod hall;
 
 impl Actor for MyWebSocket {
@@ -26,9 +32,6 @@ impl Actor for MyWebSocket {
 }
 
 // 定义处理器 trait
-// pub trait MessageHandler: Send + Sync {
-//     fn handle(&self, msg: String, ctx: &mut ws::WebsocketContext<MyWebSocket>);
-// }
 pub trait MessageHandler: Send + Sync {
     fn handle(&self, msg: serde_json::Value, ctx: &mut ws::WebsocketContext<MyWebSocket>);
 }
@@ -36,4 +39,5 @@ pub trait MessageHandler: Send + Sync {
 pub struct MyWebSocket {
     pub id: usize,
     pub handlers: HashMap<String, Box<dyn MessageHandler>>,
+    pub dispatcher: MessageDispatcher,
 }

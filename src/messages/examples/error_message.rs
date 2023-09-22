@@ -2,7 +2,8 @@
 
 use actix::Handler;
 
-use super::MyWebSocket;
+use crate::messages::MyWebSocket;
+
 
 pub struct ErrorMessage {
     pub code: String,

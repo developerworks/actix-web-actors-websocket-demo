@@ -3,12 +3,14 @@
 use actix::{AsyncContext, Handler};
 use actix_web_actors::ws;
 
-use crate::messages::resp::ResponseMessage;
-
-use super::{MessageHandler, MyWebSocket};
+#[rustfmt::skip]
+use crate::messages::{
+    MyWebSocket,
+    MessageHandler,
+    examples::resp::ResponseMessage,
+};
 
 // 定义 TextMessage 消息类型
-
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct TextMessage {
     pub text: String,
@@ -34,9 +36,7 @@ impl MessageHandler for TextMessageHandler {
         match serde_json::from_value::<TextMessage>(msg) {
             Ok(text_message) => {
                 let text_message_response = TextMessageResponse {
-                    text_message: TextMessage {
-                        text: "OK".to_string(),
-                    },
+                    text_message: TextMessage { text: "OK".to_string() },
                 };
                 let response = ResponseMessage {
                     code: "0".to_string(),
@@ -46,7 +46,6 @@ impl MessageHandler for TextMessageHandler {
                 ctx.address().do_send(response);
             }
             Err(_) => {
-
                 let response = ResponseMessage {
                     code: "1001".to_string(),
                     message: "Login successful".to_string(),

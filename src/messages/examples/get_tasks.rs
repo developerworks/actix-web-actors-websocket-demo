@@ -1,15 +1,18 @@
 // get_tasks.rs
 
-use actix::{Handler, AsyncContext};
+use actix::{AsyncContext, Handler};
 use actix_web_actors::ws;
 use serde::Deserialize;
 
-use crate::messages::resp::ResponseMessage;
-
-use super::{MessageHandler, MyWebSocket};
+#[rustfmt::skip]
+use crate::messages::{
+    MyWebSocket, 
+    MessageHandler, 
+    examples::resp::ResponseMessage
+};
 
 // 定义 GetTasks 消息类型
-#[derive(Debug,Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct GetTasks;
 
 #[derive(Debug, serde::Serialize)]
@@ -17,9 +20,9 @@ pub struct GetTasksResponse {
     tasks: Vec<Task>,
 }
 #[derive(Debug, serde::Serialize)]
-pub struct Task{
+pub struct Task {
     pub id: u32,
-    pub name: String
+    pub name: String,
 }
 
 impl actix::Message for GetTasks {
@@ -39,17 +42,14 @@ impl MessageHandler for GetTasksHandler {
                 let tasks = vec![
                     Task {
                         id: 1,
-                        name: "task 1".to_string()
+                        name: "task 1".to_string(),
                     },
                     Task {
                         id: 2,
-                        name: "task 2".to_string()
-
-                    }
+                        name: "task 2".to_string(),
+                    },
                 ];
-                let get_tasks_response = GetTasksResponse {
-                    tasks
-                };
+                let get_tasks_response = GetTasksResponse { tasks };
 
                 let response = ResponseMessage {
                     code: "200".to_string(),
@@ -57,7 +57,7 @@ impl MessageHandler for GetTasksHandler {
                     data: serde_json::json!(get_tasks_response),
                 };
                 ctx.address().do_send(response);
-            },
+            }
             Err(_) => {
                 println!("无法将消息转换为 Login 类型");
             }

@@ -1,7 +1,8 @@
 use actix::Handler;
 use serde_json::Value;
 
-use super::MyWebSocket;
+use crate::messages::MyWebSocket;
+
 
 pub struct ResponseMessage {
     pub code: String,

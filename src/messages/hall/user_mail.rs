@@ -1,7 +1,7 @@
 use actix::AsyncContext;
 use serde::Deserialize;
 
-use crate::messages::{resp::ResponseMessage, MessageHandler, MyWebSocket};
+use crate::messages::{examples::resp::ResponseMessage, MessageHandler, MyWebSocket};
 
 #[derive(Debug, Deserialize)]
 pub struct UserMail {

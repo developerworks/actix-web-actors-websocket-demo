@@ -1,19 +1,30 @@
 // login.rs
 
-use actix::{Handler, AsyncContext};
+use actix::{AsyncContext, Handler};
 use actix_web_actors::ws;
 use serde::Deserialize;
 
-use crate::messages::{MessageHandler, MyWebSocket, examples::resp::ResponseMessage};
-
-
-// use super::{MyWebSocket, MessageHandler, resp::ResponseMessage};
+use crate::messages::{examples::resp::ResponseMessage, MessageHandler, MyWebSocket};
 
 // 定义 Login 消息类型
-#[derive(Debug,Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 pub struct Login {
     pub account: String,
     pub sign: String,
+}
+
+#[allow(unused)]
+impl Login {
+    pub fn new(account: String, sign: String) -> Self {
+        Self { account, sign }
+    }
+
+    /// 用户身份认证
+    pub fn authenticate(&self) -> bool {
+        // 在实际应用中，你应该根据用户名和密码验证用户身份
+        // 这里只是一个简单的示例，始终返回true来模拟认证成功
+        self.account == "admin" && self.sign == "admin"
+    }
 }
 
 impl actix::Message for Login {
@@ -30,7 +41,6 @@ impl MessageHandler for LoginHandler {
     fn handle(&self, msg: serde_json::Value, ctx: &mut ws::WebsocketContext<MyWebSocket>) {
         println!("User {} logged in", msg);
 
-
         match serde_json::from_value::<Login>(msg) {
             Ok(login) => {
                 println!("User {} logged in", login.account);
@@ -40,7 +50,7 @@ impl MessageHandler for LoginHandler {
                     data: serde_json::json!({ "username": login.account }),
                 };
                 ctx.address().do_send(response);
-            },
+            }
             Err(_) => {
                 let response = ResponseMessage {
                     code: "200".to_string(),
@@ -50,8 +60,6 @@ impl MessageHandler for LoginHandler {
                 ctx.address().do_send(response);
             }
         }
-
-        
     }
 }
 

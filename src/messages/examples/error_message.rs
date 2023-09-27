@@ -1,9 +1,6 @@
-
-
 use actix::Handler;
 
 use crate::messages::MyWebSocket;
-
 
 pub struct ErrorMessage {
     pub code: String,
@@ -13,7 +10,6 @@ pub struct ErrorMessage {
 impl actix::Message for ErrorMessage {
     type Result = ();
 }
-
 
 impl Handler<ErrorMessage> for MyWebSocket {
     type Result = ();

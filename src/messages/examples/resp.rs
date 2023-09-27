@@ -3,11 +3,10 @@ use serde_json::Value;
 
 use crate::messages::MyWebSocket;
 
-
 pub struct ResponseMessage {
     pub code: String,
     pub message: String,
-    pub data: Value
+    pub data: Value,
 }
 
 impl actix::Message for ResponseMessage {
@@ -22,7 +21,5 @@ impl Handler<ResponseMessage> for MyWebSocket {
         // 在这里处理 ResponseMessage
         // let s = format!("code: {}, message: {}, data: {}", msg.code, msg.message, msg.data);
         // ctx.text(s);
-
-        
     }
 }

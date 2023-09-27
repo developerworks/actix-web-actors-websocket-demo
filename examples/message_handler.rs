@@ -89,7 +89,6 @@ async fn main() {
     let _ = server.await;
 }
 
-
 // 定义 Login 消息类型
 pub struct Login(String);
 

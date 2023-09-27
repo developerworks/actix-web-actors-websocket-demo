@@ -5,8 +5,7 @@ use actix::prelude::*;
 use actix_web::{web, Error, HttpRequest, HttpResponse};
 use actix_web_actors::ws;
 
-type HandlerType =
-    HashMap<String, Arc<dyn Fn(String, &mut ws::WebsocketContext<MyWebSocket>) + Send + Sync>>;
+type HandlerType = HashMap<String, Arc<dyn Fn(String, &mut ws::WebsocketContext<MyWebSocket>) + Send + Sync>>;
 
 pub struct MyWebSocket {
     pub id: usize,
@@ -59,8 +58,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
                 // 发送TextMessage消息给自己
                 // ctx.address().do_send(TextMessage(text.to_string()));
 
-                let data: Result<serde_json::Value, serde_json::Error> =
-                    serde_json::from_str(&text);
+                let data: Result<serde_json::Value, serde_json::Error> = serde_json::from_str(&text);
 
                 match data {
                     Ok(v) => {

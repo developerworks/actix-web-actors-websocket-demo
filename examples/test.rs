@@ -1,5 +1,5 @@
 use actix::prelude::*;
-use actix_web::{HttpRequest, HttpResponse, Error, web};
+use actix_web::{web, Error, HttpRequest, HttpResponse};
 use actix_web_actors::ws;
 
 pub struct MyWebSocket {
@@ -11,11 +11,10 @@ impl Actor for MyWebSocket {
 }
 
 async fn websocket_route(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
-    let resp = ws::start(MyWebSocket { id: 1}, &req, stream);
+    let resp = ws::start(MyWebSocket { id: 1 }, &req, stream);
     println!("{:?}", resp);
     resp
 }
-
 
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
     fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {

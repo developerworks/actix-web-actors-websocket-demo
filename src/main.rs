@@ -11,8 +11,9 @@ async fn main() {
     let server = HttpServer::new(|| {
         App::new().configure(router::register_handlers)
     })
-    .bind("127.0.0.1:8080")
+    .bind("127.0.0.1:9091")
     .unwrap()
     .run();
+    println!("Websocket server listening at: 127.0.0.1:9091");
     let _ = server.await;
 }

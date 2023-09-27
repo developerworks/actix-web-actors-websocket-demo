@@ -35,7 +35,6 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
     }
 }
 
-
 #[cfg(not)]
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
     fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {
@@ -103,8 +102,6 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
     }
 }
 
-
-
 #[cfg(not)]
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
     fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {
@@ -112,23 +109,14 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
             Ok(ws::Message::Ping(msg)) => ctx.pong(&msg),
             Ok(ws::Message::Text(text)) => {
                 // 解析消息类型
-                let data: Result<serde_json::Value, serde_json::Error> =
-                    serde_json::from_str(&text);
+                let data: Result<serde_json::Value, serde_json::Error> = serde_json::from_str(&text);
                 match data {
                     Ok(v) => {
                         if let Some(message_type) = v.get("type").and_then(|v| v.as_str()) {
                             match message_type {
                                 "login" => {
-                                    let username = v
-                                        .get("username")
-                                        .and_then(|v| v.as_str())
-                                        .unwrap_or("")
-                                        .to_string();
-                                    let password = v
-                                        .get("password")
-                                        .and_then(|v| v.as_str())
-                                        .unwrap_or("")
-                                        .to_string();
+                                    let username = v.get("username").and_then(|v| v.as_str()).unwrap_or("").to_string();
+                                    let password = v.get("password").and_then(|v| v.as_str()).unwrap_or("").to_string();
                                     // 发送 Login 消息给自己
                                     ctx.address().do_send(Login { username, password });
                                 }
@@ -165,7 +153,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
                 let message_type = data["type"].as_str().unwrap().to_string();
                 let message = data["message"].clone();
                 self.dispatcher.dispatch(message_type, message);
-            },
+            }
             _ => (),
         }
     }

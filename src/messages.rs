@@ -4,6 +4,7 @@ use actix::Actor;
 use actix_web_actors::ws;
 use std::collections::HashMap;
 
+use self::hall::login::Login;
 #[rustfmt::skip]
 use self::{
     examples::{
@@ -40,4 +41,5 @@ pub struct MyWebSocket {
     pub id: usize,
     pub handlers: HashMap<String, Box<dyn MessageHandler>>,
     pub dispatcher: MessageDispatcher,
+    pub login: Login,
 }
